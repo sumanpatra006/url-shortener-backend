@@ -18,7 +18,8 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://linksnap-six.vercel.app", 
-      "https://urlshortener.enigmavssut.in"
+      "https://eniglink.enigmavssut.in",
+      "https://url-shortener-frontend-ten-psi.vercel.app"
     ],
     credentials: true,
   })
