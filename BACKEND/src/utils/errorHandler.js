@@ -6,10 +6,10 @@ export const errorHandler = (err, req, res, next) => {
     });
   }
   console.log(err)
-  res.status(500).json({ 
+  res.status(500).json({
     message: err.message || "internal server error",
-    sucess : false
-});
+    sucess: false
+  });
 };
 
 export class AppError extends Error {
@@ -26,20 +26,20 @@ export class AppError extends Error {
   }
 }
 
-export class NotFoundError extends AppError{
-    constructor(message = "Resource not found"){
-        super(message,404)
-    }
+export class NotFoundError extends AppError {
+  constructor(message = "Resource not found") {
+    super(message, 404)
+  }
 }
 
-export class ConflictError extends AppError{
-    constructor(message = "Conflict occurred"){
-        super(message,409)
-    }
+export class ConflictError extends AppError {
+  constructor(message = "Conflict occurred") {
+    super(message, 409)
+  }
 }
 
-export class BadRequestError extends AppError{
-    constructor(message = "Bad request"){
-        super(message,400)
-    }
+export class BadRequestError extends AppError {
+  constructor(message = "Bad request") {
+    super(message, 400)
+  }
 }
