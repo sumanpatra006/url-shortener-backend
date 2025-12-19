@@ -1,18 +1,28 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors"; // allow cross server access in the network
+import cookieParser from "cookie-parser";
+
 import connectDB from "./src/config/mongo.config.js";
+
 import shortUrl from "./src/routes/shortUrl.routes.js";
+import authRoutes from "./src/routes/auth.routes.js";
+import userRoutes from "./src/routes/user.route.js";
+
 import { redirectFromShortUrl } from "./src/controller/shortUrl.controller.js";
 import { errorHandler } from "./src/utils/errorHandler.js";
-import cors from "cors"; // aloow cross server access in the network
-import authRoutes from "./src/routes/auth.routes.js";
 import { attachUser } from "./src/utils/attachUser.js";
-import cookieParser from "cookie-parser";
-import userRoutes from "./src/routes/user.route.js";
+
+const app = express();
 
 dotenv.config({ path: "./.env" });
 
-const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use(cookieParser());
+app.use(attachUser);
+
 app.use(
   cors({
     origin: [
@@ -25,13 +35,8 @@ app.use(
   })
 );
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-app.use(cookieParser());
-app.use(attachUser);
-
 await connectDB();
+
 app.listen(process.env.PORT, () => {
   console.log(`listening to port ${process.env.PORT}`);
 });
@@ -41,8 +46,9 @@ app.get("/", (req, res) => {
 });
 app.use("/api/create", shortUrl);
 app.use("/api/auth", authRoutes);
-app.get("/:shorturl", redirectFromShortUrl);
 app.use("/api/user", userRoutes);
+
+app.get("/:shorturl", redirectFromShortUrl);
 
 app.use(errorHandler);
 
